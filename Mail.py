@@ -76,15 +76,15 @@ class Mail:
 		
 		self.msock.send("LIST\r\n")
 		
-		
 		status= self.recvline(self.msock)
 		if not status[:1] == "+":
 			# liste konnte nicht erhalten werden
+			print "Mail: Status: %s"%answer
 			return 0
 		
 		mail_list = list();
 		ok = 1
-		while ok:
+		while 1:
 			item = self.recvline(self.msock)
 			if item == ".":
 				ok = 0

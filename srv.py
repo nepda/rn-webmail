@@ -1,4 +1,4 @@
-import sys
+import sys,urllib
 
 cfg_index_name = "index_html" # legt die Standardresource fest (Datei: resource_index_html.py)
 
@@ -28,7 +28,7 @@ def main(conn, data):
 		print "The resource %s was not found"%request['resource']
 		status404(conn, request)
 	except:
-		print "500 not found:", sys.exc_info()[0]
+		print "500 server error:", sys.exc_info()
 		status500(conn, request)
 	print "\r\n\r\n- - - - request end : nepdaPy server - - - - - - - - - - - - - "
 
@@ -100,7 +100,7 @@ def parseHeader(data):
 				key = key_value_pair
 				value = None
 				
-			url_params[key] = value
+			url_params[urllib.unquote(key)] = urllib.unquote(value)
 	
 	# Zur Kontrolle / Uebersicht einfach mal alles ausgeben
 	print "URL-Parameter: %s"%url_params
