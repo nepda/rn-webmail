@@ -1,9 +1,9 @@
-import sys,urllib
+import sys, urllib
 
 cfg_index_name = "index_html" # legt die Standardresource fest (Datei: resource_index_html.py)
 
 def main(conn, data):
-	print "\r\n\r\n- - - - request for nepdaPy server - - - - - - - - - - - - - - "
+	print "\r\n\r\n- - - - request for nepdaPy server 2 - - - - - - - - - - - - - - "
 	
 	request = parseHeader(data) # sucht relevante infos aus dem Header
 	#
@@ -11,11 +11,13 @@ def main(conn, data):
 	# wuerde folgendes ergeben:
 	# reuqest = {'resource': '/index.html', 'version': '1.1', 'protocol': 'HTTP', 'method': 'GET', 'params': {'param1': 'value1', 'param2': 'val2'}}
 	
-	resource = request['resource'][1:] # Resource ohne den anfangs Slash
+	
 	
 	# Wenn also keine Resource explizit angegeben wurde
 	if request['resource'] == "/" :
 		resource = cfg_index_name # standard Seite laden
+		
+	resource = request['resource'][1:] # Resource ohne den anfangs Slash
 	
 	try:
 		mod = __import__("resource_" + resource.replace(".", "_")) # Importiert die Datei "resource_<module_name>"
@@ -111,6 +113,12 @@ def parseHeader(data):
 	
 	request = {"protocol":http_protocol, "version":http_version, "method":http_method, "resource":http_request_file, "params":url_params}
 	return request
+
+# ausgelagerte 200 Status Funktion
+def status200(conn, request):
+	conn.send("HTTP/1.0 200 OK\r\n")
+	conn.send("Content-Type: text/html; charset=utf8\r\n")
+	conn.send("\r\n")
 
 # ausgelagerte 404 Status Funktion
 def status404(conn, request):
